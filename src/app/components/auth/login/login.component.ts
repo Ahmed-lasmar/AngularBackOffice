@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import {AuthService} from '../../../services/auth.service';
 import {User} from '../../../models/User';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -22,7 +23,7 @@ export class LoginComponent implements OnInit {
     password: null
   };
 
-  constructor(private formBuilder: UntypedFormBuilder, private authService: AuthService) {
+  constructor(private formBuilder: UntypedFormBuilder, private authService: AuthService, private route: Router) {
     this.createLoginForm();
     this.createRegisterForm();
     this.authService.currentUser.subscribe(data => {
@@ -87,11 +88,13 @@ export class LoginComponent implements OnInit {
         // tslint:disable-next-line:no-shadowed-variable
         this.authService.currentUser.subscribe(data => {
           this.currentUser = data;
-          console.log('login done');
         });
         this.isLoginFailed = false;
         this.isLoggedIn = true;
-        /*this.reloadPage();*/
+        console.log('login done');
+        // this.reloadPage();
+        // @ts-ignore
+        this.route.navigateByUrl('/dashboard/default');
       },
       error: err => {
         this.isLoginFailed = true;
@@ -102,5 +105,10 @@ export class LoginComponent implements OnInit {
   }
   reloadPage(): void {
     window.location.reload();
+  }
+
+  // tslint:disable-next-line:use-lifecycle-interface
+  ngOnDestroy() {
+    this.reloadPage();
   }
 }

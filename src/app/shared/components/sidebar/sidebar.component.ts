@@ -54,6 +54,9 @@ export class SidebarComponent {
     if (this.authService.isLoggedIn()) {
       this.isLoggedIn = true;
     }
+    this.authService.currentUser.subscribe(data => {
+      this.currentUser = data;
+    });
   }
 
   // Active Nave state
